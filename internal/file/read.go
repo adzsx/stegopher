@@ -15,20 +15,12 @@ var (
 	img image.Image
 )
 
-func Embed(name string, message string) {
-	stat, err := os.Stat(name)
-	utils.Err(err)
-	log.Println(stat.Size())
-
-	if len(message)*8 > int(stat.Size()) {
-		log.Fatalln("Message too large for image.")
-	}
-
+func read(name string) {
 	f, err := os.Open(name)
 	utils.Err(err)
 	defer f.Close()
 
-	fType := GetType(name)
+	fType := utils.GetType(name)
 
 	if fType == "png" {
 		img, err = png.Decode(f)
@@ -44,6 +36,8 @@ func Embed(name string, message string) {
 	} else {
 		log.Fatalln("Invalid file format")
 	}
+}
 
-	log.Println(img)
+func Extract(input utils.Input) {
+	read(input.Image)
 }
